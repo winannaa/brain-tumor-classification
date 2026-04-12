@@ -51,4 +51,3 @@ if uploaded_file:
         conf = np.max(output)
 
         st.success(f"Prediction: {class_names[pred]}")
-        st.write(f"Confidence: {conf:.2f}")
