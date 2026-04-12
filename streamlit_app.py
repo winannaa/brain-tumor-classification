@@ -1,21 +1,20 @@
 import streamlit as st
 import numpy as np
 from PIL import Image
-import tflite_runtime.interpreter as tflite
+import onnxruntime as ort
 
 # =========================
 # LOAD MODEL
 # =========================
 @st.cache_resource
 def load_model():
-    interpreter = tflite.Interpreter(model_path="model/model.tflite")
-    interpreter.allocate_tensors()
-    return interpreter
+    session = ort.InferenceSession("model/model.onnx")
+    return session
 
-interpreter = load_model()
+session = load_model()
 
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
+input_name = session.get_inputs()[0].name
+output_name = session.get_outputs()[0].name
 
 # =========================
 # LABEL
@@ -46,9 +45,7 @@ if uploaded_file:
     if st.button("Predict"):
         img = preprocess_image(image)
 
-        interpreter.set_tensor(input_details[0]['index'], img)
-        interpreter.invoke()
-        output = interpreter.get_tensor(output_details[0]['index'])
+        output = session.run([output_name], {input_name: img})[0]
 
         pred = np.argmax(output)
         conf = np.max(output)
