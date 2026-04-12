@@ -1,14 +1,14 @@
 import streamlit as st
 import numpy as np
 from PIL import Image
-import tensorflow as tf
+import tflite_runtime.interpreter as tflite
 
 # =========================
-# LOAD MODEL TFLITE
+# LOAD MODEL
 # =========================
 @st.cache_resource
 def load_model():
-    interpreter = tf.lite.Interpreter(model_path="model/model.tflite")
+    interpreter = tflite.Interpreter(model_path="model/model.tflite")
     interpreter.allocate_tensors()
     return interpreter
 
@@ -28,7 +28,7 @@ class_names = ["Glioma", "Meningioma", "Pituitary", "No Tumor"]
 def preprocess_image(image):
     img = image.resize((224, 224))
     img = np.array(img).astype(np.float32)
-    img = img / 255.0   # ⚠️ nanti kita cek ini kalau hasil aneh
+    img = img / 255.0
     img = np.expand_dims(img, axis=0)
     return img
 
@@ -36,9 +36,8 @@ def preprocess_image(image):
 # UI
 # =========================
 st.title("🧠 Brain Tumor Classification")
-st.write("Upload MRI image to detect brain tumor.")
 
-uploaded_file = st.file_uploader("Upload Image", type=["jpg", "png", "jpeg"])
+uploaded_file = st.file_uploader("Upload MRI Image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
