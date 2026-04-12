@@ -1,25 +1,12 @@
-# 📦 Streamlit App Starter Kit 
-```
-⬆️ (Replace above with your app's name)
-```
+# Brain Tumor Classification using MobileNetV2
+## Overview
 
-Description of the app ...
+This project is a Machine Learning-based web application for classifying brain tumor types from MRI images. The model can detect whether a brain MRI image contains a tumor and classify it into one of the predefined categories.
 
-## Demo App
+The system classifies images into 4 classes:
+- Glioma Tumor
+- Meningioma Tumor
+- Pituitary Tumor
+- No Tumor
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://app-starter-kit.streamlit.app/)
-
-## GitHub Codespaces
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/app-starter-kit?quickstart=1)
-
-## Section Heading
-
-This is filler text, please replace this with text for this section.
-
-## Further Reading
-
-This is filler text, please replace this with a explanatory text about further relevant resources for this repo
-- Resource 1
-- Resource 2
-- Resource 3
+This project aims to assist in early detection of brain tumors using deep learning techniques.
