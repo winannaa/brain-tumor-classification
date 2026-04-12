@@ -1,35 +1,34 @@
 import streamlit as st
 import numpy as np
-from tensorflow.keras.models import load_model
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from PIL import Image
+import tensorflow as tf
 
 # =========================
-# CONFIG
-# =========================
-st.set_page_config(page_title="Brain Tumor Classifier", layout="centered")
-
-# =========================
-# LOAD MODEL
+# LOAD MODEL TFLITE
 # =========================
 @st.cache_resource
-def load_my_model():
-    return load_model("model/best_brain_tumor_model_MobileNetV2.h5")
+def load_model():
+    interpreter = tf.lite.Interpreter(model_path="model/model.tflite")
+    interpreter.allocate_tensors()
+    return interpreter
 
-model = load_my_model()
+interpreter = load_model()
+
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
 
 # =========================
-# LABEL KELAS
+# LABEL
 # =========================
 class_names = ["Glioma", "Meningioma", "Pituitary", "No Tumor"]
 
 # =========================
-# PREPROCESSING (MobileNetV2)
+# PREPROCESSING
 # =========================
 def preprocess_image(image):
-    img = image.resize((224, 224))  # ukuran standar MobileNetV2
-    img = np.array(img)
-    img = preprocess_input(img)
+    img = image.resize((224, 224))
+    img = np.array(img).astype(np.float32)
+    img = img / 255.0   # ⚠️ nanti kita cek ini kalau hasil aneh
     img = np.expand_dims(img, axis=0)
     return img
 
@@ -37,35 +36,23 @@ def preprocess_image(image):
 # UI
 # =========================
 st.title("🧠 Brain Tumor Classification")
-st.markdown("Upload gambar MRI untuk mendeteksi jenis tumor otak.")
+st.write("Upload MRI image to detect brain tumor.")
 
-uploaded_file = st.file_uploader("📤 Upload MRI Image", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Upload Image", type=["jpg", "png", "jpeg"])
 
-# =========================
-# MAIN
-# =========================
-if uploaded_file is not None:
+if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
+    st.image(image)
 
-    st.image(image, caption="MRI Image", use_column_width=True)
+    if st.button("Predict"):
+        img = preprocess_image(image)
 
-    if st.button("🔍 Predict"):
-        with st.spinner("Menganalisis gambar..."):
-            img = preprocess_image(image)
+        interpreter.set_tensor(input_details[0]['index'], img)
+        interpreter.invoke()
+        output = interpreter.get_tensor(output_details[0]['index'])
 
-            prediction = model.predict(img)
-            predicted_class = np.argmax(prediction)
-            confidence = np.max(prediction)
+        pred = np.argmax(output)
+        conf = np.max(output)
 
-            # =========================
-            # HASIL
-            # =========================
-            st.success(f"🧾 Prediction: {class_names[predicted_class]}")
-            st.info(f"📊 Confidence: {confidence:.2f}")
-
-            # =========================
-            # DETAIL PROBABILITAS
-            # =========================
-            st.write("### 📊 Detail Probabilities:")
-            for i, label in enumerate(class_names):
-                st.write(f"{label}: {prediction[0][i]:.2f}")
+        st.success(f"Prediction: {class_names[pred]}")
+        st.write(f"Confidence: {conf:.2f}")
