@@ -19,3 +19,6 @@ The dataset used in this project is publicly available at [Brain Tumor MRI Datas
 
 ## Note
 This project is still in the development stage and is not yet perfect. It will continue to be improved and updated regularly.
+
+## Reference
+[1] National Institutes of Health (NIH). (2024, May 22). AI tool predicts brain tumor subtypes, could help improve treatment. [Online]. Tersedia: https://www.nih.gov/news-events/news-releases/ai-tool-predicts-brain-tumor-subtypes-could-help-improve-treatment
