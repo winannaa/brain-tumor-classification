@@ -1,5 +1,5 @@
 # Brain Tumor Classification using MobileNetV2
-In the medical field, diagnosing the type of brain tumor requires a high level of visual accuracy. Knowing the specific characteristics of a tumor is very important so that doctors can give the most appropriate treatment for patients [1]. However, this detailed diagnosis process often requires expensive laboratory equipment and special expertise that may not be available in all hospitals [1]. As a result, patient queues become longer and laboratory results can take weeks [1].
+In the medical field, diagnosing the type of brain tumor requires a high level of visual accuracy. Knowing the specific characteristics of a tumor is very important so that doctors can give the most appropriate treatment for patients [1]. However, this detailed diagnosis process often requires expensive laboratory equipment and special expertise that may not be available in all hospitals. As a result, patient queues become longer and laboratory results can take weeks.
 
 This delay can postpone important treatment that is crucial for patient safety. In addition, medical staff who have to check hundreds of MRI images every day are at risk of eye fatigue, which can lead to inconsistency when analyzing scan results.
 
@@ -20,5 +20,3 @@ The dataset used in this project is publicly available at [Brain Tumor MRI Datas
 ## Note
 This project is still in the development stage and is not yet perfect. It will continue to be improved and updated regularly.
 
-## Reference
-[1] National Institutes of Health (NIH). (2024, May 22). AI tool predicts brain tumor subtypes, could help improve treatment. [Online]. Tersedia: https://www.nih.gov/news-events/news-releases/ai-tool-predicts-brain-tumor-subtypes-could-help-improve-treatment
